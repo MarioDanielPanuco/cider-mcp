@@ -33,42 +33,47 @@ The full tool list, with the exact input schema for each, lives in
 
 ## Setup
 
-Clone the repo, install, and build:
-
-```sh
-git clone https://github.com/<you>/cider-mcp.git
-cd cider-mcp
-pnpm install
-pnpm build
-```
-
-This produces `dist/index.js`, a plain Node script — that's what gets registered
-with your MCP client.
+The published package on npm carries the server; you don't need to clone or build.
 
 ### Claude Code
 
+One command — npx pulls `cider-mcp` from npm and runs it:
+
 ```sh
-claude mcp add cider --scope user -- node "$PWD/dist/index.js"
+claude mcp add cider --scope user -- npx -y cider-mcp
 ```
 
 ### Claude Desktop
 
-Desktop reads a static JSON config, so there's no shell expansion — the path
-must be a literal absolute path. Run `pwd` at the repo root to get it, then add
-an entry to `claude_desktop_config.json`:
+Add an entry to `claude_desktop_config.json`, then restart Desktop (it only reads
+the config on launch):
 
 ```json
 {
   "mcpServers": {
     "cider": {
-      "command": "node",
-      "args": ["<path-to-repo>/dist/index.js"]
+      "command": "npx",
+      "args": ["-y", "cider-mcp"]
     }
   }
 }
 ```
 
-Restart Claude Desktop after editing the config — it only reads it on launch.
+### From source (for development)
+
+To hack on the server, run it from a local clone instead:
+
+```sh
+git clone https://github.com/MarioDanielPanuco/cider-mcp.git
+cd cider-mcp
+pnpm install
+pnpm build
+claude mcp add cider --scope user -- node "$PWD/dist/index.js"
+```
+
+(For Claude Desktop from source, use `"command": "node"` with an absolute
+`"<path-to-repo>/dist/index.js"` — the config has no shell expansion; run `pwd`
+at the repo root to get the path.)
 
 ### First-run pairing
 
