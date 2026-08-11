@@ -5,3 +5,6 @@ dist/
 !.env.example
 *.log
 .superpowers/
+
+# Local-only agent guidance; intentionally not published.
+CLAUDE.md
