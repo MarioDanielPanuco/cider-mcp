@@ -23,7 +23,8 @@ export const queueTools: ToolDef[] = [
   defineTool({
     name: 'queue_list',
     title: 'List the queue',
-    description: 'List upcoming tracks in the play queue. Indices are 0-based.',
+    description:
+      'List upcoming tracks in the play queue. Indices are 0-based. Each track carries an audio-analysis block (bpm, musical key, energy, valence, acousticness) — useful for ordering the queue by energy.',
     inputSchema: pagination,
     annotations: { readOnlyHint: true },
     handler: ({ offset, limit }, { cider }) => cider.get('/api/v2/queue', { offset, limit }),
@@ -39,7 +40,7 @@ export const queueTools: ToolDef[] = [
   defineTool({
     name: 'queue_add_next',
     title: 'Play next',
-    description: 'Insert an item immediately after the current track.',
+    description: 'Insert an item immediately after the current track. Catalog ids come from catalog_search.',
     inputSchema: itemRef,
     annotations: QUEUE_MUTATES,
     handler: async ({ type, id }, { cider }) => {
@@ -51,7 +52,7 @@ export const queueTools: ToolDef[] = [
   defineTool({
     name: 'queue_add_later',
     title: 'Add to end of queue',
-    description: 'Append an item to the end of the queue.',
+    description: 'Append an item to the end of the queue. Catalog ids come from catalog_search.',
     inputSchema: itemRef,
     annotations: QUEUE_MUTATES,
     handler: async ({ type, id }, { cider }) => {

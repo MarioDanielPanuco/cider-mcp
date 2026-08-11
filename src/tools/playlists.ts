@@ -36,7 +36,8 @@ export const playlistTools: ToolDef[] = [
   defineTool({
     name: 'playlist_add_tracks',
     title: 'Add tracks to a playlist',
-    description: 'Append tracks to an existing library playlist. Tracks cannot be removed through this server.',
+    description:
+      "Append tracks to an editable library playlist — one with canEdit: true in library_playlists. Appends to Apple's curated playlists fail. Tracks cannot be removed through this server.",
     inputSchema: z.object({
       playlist_id: z.string().min(1).describe('Library playlist id, e.g. "p.xxxxxxxx".'),
       track_ids: trackIds.min(1),

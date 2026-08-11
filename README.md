@@ -178,6 +178,39 @@ non-obvious and would otherwise be rediscovered the hard way:
   is inferred rather than tested end-to-end — confirm by hand (list the queue,
   move an item, list it again) before relying on it for anything precise.
 
+## Recipes
+
+The tools are deliberately small; the point is composing them. A few patterns
+that fall out of the 34 that ship:
+
+### Build a playlist from what you've been playing
+
+`recently_played` returns your listening history with catalog ids attached.
+Pick the tracks worth keeping and hand those ids to `playlist_create` —
+last night's listening becomes a playlist in two calls. To grow it later,
+append with `playlist_add_tracks` (your own playlists only — check `canEdit`
+in `library_playlists`).
+
+### Queue an energy arc
+
+Every track that comes back from `now_playing`, `playback_state`, or
+`queue_list` carries an `audio-analysis` block: bpm, musical key, energy,
+valence, acousticness. So a queue doesn't have to be a pile. Gather candidates
+with `catalog_search`, add them with `queue_add_later`, read the analysis back
+from `queue_list`, then `queue_move` until energy climbs track over track —
+calm openers, peak at the end. Invert the sort for a wind-down.
+
+### A vibe, worked
+
+"Walking home late, city empty, light rain." Rain-slick empty streets → sax
+and neon → warmth as you get close. `queue_clear` (confirm: true) and
+`set_shuffle` off so the arc holds, then `catalog_search` each track and
+`queue_add_later` in order: open cold and lonely (Vangelis "Blade Runner
+Blues", Bohren & der Club of Gore "Prowler"), ache underneath (Portishead
+"Roads", Chet Baker "Almost Blue"), then let it warm as you near the door
+(Khruangbin "So We Won't Forget", The Cinematic Orchestra "To Build a Home").
+If the arc lands, `playlist_create` with the same ids keeps it.
+
 ## Development
 
 ```sh

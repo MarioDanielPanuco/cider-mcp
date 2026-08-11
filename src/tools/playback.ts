@@ -14,7 +14,7 @@ export const playbackTools: ToolDef[] = [
     name: 'now_playing',
     title: 'Now playing',
     description:
-      'Get the currently playing track: title, artist, album, and artwork. Playback position is not included here — use playback_state for that.',
+      'Get the currently playing track: title, artist, album, and artwork, plus an audio-analysis block (bpm, musical key, energy, valence, acousticness) useful for finding similar tracks. Playback position is not included here — use playback_state for that.',
     inputSchema: empty,
     annotations: READ_ONLY,
     handler: (_args, { cider }) => cider.request('/api/v2/playback/now-playing'),
@@ -22,7 +22,8 @@ export const playbackTools: ToolDef[] = [
   defineTool({
     name: 'playback_state',
     title: 'Playback state',
-    description: 'Get a snapshot of playback: playing/paused, repeat and shuffle modes, autoplay, and volume.',
+    description:
+      'Get a snapshot of playback: playing/paused, repeat and shuffle modes, autoplay, and volume. The embedded track object carries an audio-analysis block (bpm, musical key, energy, valence, acousticness).',
     inputSchema: empty,
     annotations: READ_ONLY,
     handler: (_args, { cider }) => cider.request('/api/v2/playback'),
@@ -115,7 +116,8 @@ export const playbackTools: ToolDef[] = [
   defineTool({
     name: 'play_item',
     title: 'Play an item',
-    description: 'Play a single item immediately by catalog type and id, replacing what is playing.',
+    description:
+      'Play a single item immediately by catalog type and id, replacing what is playing. Catalog ids come from catalog_search.',
     inputSchema: z.object({
       type: z.string().min(1).describe('Apple Music type, e.g. "songs".'),
       id: z.string().min(1).describe('Apple Music catalog id.'),

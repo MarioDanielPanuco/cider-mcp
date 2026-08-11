@@ -13,7 +13,8 @@ export const libraryTools: ToolDef[] = [
   defineTool({
     name: 'library_playlists',
     title: 'List library playlists',
-    description: "List the user's Apple Music library playlists.",
+    description:
+      "List the user's Apple Music library playlists. Each playlist has a canEdit flag — true for the user's own playlists, false for Apple's curated ones — and only canEdit: true playlists accept playlist_add_tracks.",
     inputSchema: pagination,
     annotations: READ_ONLY,
     handler: ({ offset, limit }, { cider }) => cider.get('/api/v2/library/playlists', { offset, limit }),
